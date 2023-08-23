@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 
 export const AuthContext = createContext({
   isAuthenticated: false,
+  username: "",
   login: (username: string, password: string): boolean => {
     return false;
   },
@@ -12,10 +13,12 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: any) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
+  const [username, setUsername] = useState<string>("");
 
   const login = (username: string, password: string) => {
     if (username == "Sambo" && password == "password") {
       setAuthenticated(true);
+      setUsername(username);
       return true;
     } else {
       setAuthenticated(false);
@@ -28,7 +31,7 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, username }}>
       {children}
     </AuthContext.Provider>
   );

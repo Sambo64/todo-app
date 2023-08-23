@@ -4,6 +4,7 @@ import { useAuth } from "../seurity/AuthContext";
 export const Header = () => {
   const authContext = useAuth();
   const isAuthenticated = authContext.isAuthenticated;
+  const username = authContext.username;
 
   return (
     <header className="border-bottom border-light border-5 mb-5 p-2">
@@ -17,7 +18,7 @@ export const Header = () => {
               <ul className="navbar-nav">
                 <li className="nav-item">
                   {isAuthenticated && (
-                    <Link className="nav-link" to="/welcome/Sambo">
+                    <Link className="nav-link" to={`/welcome/${username}`}>
                       Home
                     </Link>
                   )}
