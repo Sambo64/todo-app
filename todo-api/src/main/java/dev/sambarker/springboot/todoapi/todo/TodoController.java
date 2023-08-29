@@ -1,10 +1,7 @@
 package dev.sambarker.springboot.todoapi.todo;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,5 +29,17 @@ public class TodoController {
     public ResponseEntity<Void> deleteUserTodos(@PathVariable String username, @PathVariable int id) {
         todoService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/users/{username}/todos/{id}")
+    public Todo updateUserTodo(@PathVariable String username, @PathVariable int id, @RequestBody Todo todo) {
+        todo.setId(id);
+        todoService.updateTodo(todo);
+        return todo;
+    }
+
+    @PostMapping("/users/{username}/todos")
+    public Todo createUserTodo(@PathVariable String username, @RequestBody Todo todo) {
+        return todoService.addTodo(username, todo.getDescription(), todo.getTargetDate(), todo.isDone());
     }
 }
