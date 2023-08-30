@@ -1,9 +1,10 @@
 import { createContext, useContext, useState } from "react";
+import { executeBasicAuthenticationService } from "../todo/api/HelloWorldApiService";
 
 export const AuthContext = createContext({
   isAuthenticated: false,
   username: "",
-  login: (username: string, password: string): boolean => {
+  login: async (username: string, password: string): Promise<boolean> => {
     return false;
   },
   logout: () => {},
@@ -14,20 +15,34 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }: any) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [username, setUsername] = useState<string>("");
+  const [token, setToken] = useState("");
 
-  const login = (username: string, password: string) => {
-    if (username == "Sambo" && password == "password") {
-      setAuthenticated(true);
-      setUsername(username);
-      return true;
-    } else {
+  const login = async (username: string, password: string) => {
+    const basicToken = "Basic " + window.btoa(username + ":" + password);
+
+    try {
+      const response = await executeBasicAuthenticationService(basicToken);
+
+      if (response.status == 200) {
+        setAuthenticated(true);
+        setUsername(username);
+        setToken(basicToken);
+        return true;
+      } else {
+        setAuthenticated(false);
+        setToken("");
+        return false;
+      }
+    } catch (error) {
       setAuthenticated(false);
+      setToken("");
       return false;
     }
   };
 
   const logout = () => {
     setAuthenticated(false);
+    setToken("");
   };
 
   return (

@@ -36,6 +36,10 @@ export const ListTodoComponent = () => {
     navigate(`/todo/${id}`);
   };
 
+  const addTodo = () => {
+    navigate(`/todo/-1`);
+  };
+
   return (
     <div className="container">
       <h1>Things you want to do!</h1>
@@ -78,6 +82,9 @@ export const ListTodoComponent = () => {
           </tbody>
         </table>
       </div>
+      <button className="btn btn-success m-5" onClick={addTodo}>
+        Add New Todo
+      </button>
     </div>
   );
 };
